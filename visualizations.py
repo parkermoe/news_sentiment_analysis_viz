@@ -1,76 +1,6 @@
 import matplotlib.pyplot as plt
-
-# filtering the dataframe to only inlcude CNN, Fox News, and MSNBC
-df = df[df['source_name'].isin(['CNN', 'Fox News', 'MSNBC'])]
-
-# Get the sentiment counts per author
-sentiment_counts = df.groupby('source_name')['sentiment'].value_counts().unstack().fillna(0)
-
-# Sort the authors by the total number of articles
-sorted_authors = sentiment_counts.sum(axis=1).sort_values(ascending=False).index
-
-# Select the top 10 authors
-top_sentiment_counts = sentiment_counts.loc[sorted_authors[:10]]
-
-# Plot the stacked bar chart
-ax = top_sentiment_counts.plot(kind='bar', stacked=True, figsize=(10, 6))
-ax.set_title('Sentiment Counts per News Source')
-ax.set_ylabel('Number of Articles')
-
-# Display the legend
-ax.legend(title='Sentiment', bbox_to_anchor=(1, 1))
-
-plt.show()
-
-
 import plotly.express as px
-
-# Filter for the desired news sources
-selected_sources = ["CNN", "Fox News", "MSNBC"]
-sentiment_counts = sentiment_counts[sentiment_counts["source_name"].isin(selected_sources)]
-
-# Get the top 3 authors for each news source, excluding 'Associated Press' and 'Fox News Staff' for Fox News
-top_authors_by_source = sentiment_counts.groupby(['source_name', 'author'])['count'].sum().reset_index()
-top_authors_by_source = top_authors_by_source[top_authors_by_source['author'].notnull()]
-
-exclude_authors = ['Associated Press', 'Fox News Staff']
-top_authors_by_source = top_authors_by_source[~((top_authors_by_source['source_name'] == 'Fox News') & (top_authors_by_source['author'].isin(exclude_authors)))]
-
-top_authors = top_authors_by_source.groupby('source_name').apply(lambda x: x.nlargest(3, 'count')).reset_index(drop=True)['author']
-filtered_sentiment_counts = sentiment_counts[sentiment_counts['author'].isin(top_authors)]
-
-# Capitalize sentiment values
-filtered_sentiment_counts['sentiment'] = filtered_sentiment_counts['sentiment'].str.capitalize()
-
-# Create the treemap visualization
-fig = px.treemap(filtered_sentiment_counts, path=['source_name', 'author', 'sentiment'], values='count',
-                 color='sentiment', color_discrete_map={"source_name": "rgba(153, 204, 255, 1)", "Positive": "rgba(68, 168, 104,0.8)", "Negative": "rgba(255, 51, 51,0.8)", "Neutral": "rgba(60,158,255,0.8)"},
-                 title="Top 3 Authors Sentiment Counts per News Source")
-
-# update layout
-fig.update_layout(
-    title={
-        'text': "Top 3 Authors Sentiment Counts per News Source",
-        'y':0.95,
-        'x':0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'})
-
-# Setting the theme
-fig.update_layout(template='seaborn')
-# making background grey
-fig.update_layout({'plot_bgcolor':'rgba(218,222,229,0)'})
-
-# making the boxes bigger
-fig.update_layout({'margin':dict(t=50, l=25, r=25, b=25)})
-fig.update_traces(textfont_size=15)
-
-
-
-fig.show()
-
 import numpy as np
-import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from collections import defaultdict
 import pandas as pd
@@ -79,22 +9,86 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger')
+def generate_visualizations(df):
 
-# filter to only include CNN, Fox News, and MSNBC
-df = df[df['source'].isin(['CNN', 'Fox News', 'MSNBC'])]
+  # filtering the dataframe to only inlcude CNN, Fox News, and MSNBC
+  df = df[df['source_name'].isin(['CNN', 'Fox News', 'MSNBC'])]
 
-news_sources = ['CNN', 'MSNBC', 'Fox News']
+  # Get the sentiment counts per author
+  sentiment_counts = df.groupby('source_name')['sentiment'].value_counts().unstack().fillna(0)
 
-# Concatenate all article contents for each news source
-source_contents = defaultdict(str)
-for _, row in df.iterrows():
-    source = row['source_name']
-    content = row['content']
-    if isinstance(content, str):
-        source_contents[source] += content
+  # Sort the authors by the total number of articles
+  sorted_authors = sentiment_counts.sum(axis=1).sort_values(ascending=False).index
+
+  # Select the top 10 authors
+  top_sentiment_counts = sentiment_counts.loc[sorted_authors[:10]]
+
+  # Plot the stacked bar chart
+  ax = top_sentiment_counts.plot(kind='bar', stacked=True, figsize=(10, 6))
+  ax.set_title('Sentiment Counts per News Source')
+  ax.set_ylabel('Number of Articles')
+
+  # Display the legend
+  ax.legend(title='Sentiment', bbox_to_anchor=(1, 1))
+
+  plt.show()
+
+  # Filter for the desired news sources
+  selected_sources = ["CNN", "Fox News", "MSNBC"]
+  sentiment_counts = sentiment_counts[sentiment_counts["source_name"].isin(selected_sources)]
+
+  # Get the top 3 authors for each news source, excluding 'Associated Press' and 'Fox News Staff' for Fox News
+  top_authors_by_source = sentiment_counts.groupby(['source_name', 'author'])['count'].sum().reset_index()
+  top_authors_by_source = top_authors_by_source[top_authors_by_source['author'].notnull()]
+
+  exclude_authors = ['Associated Press', 'Fox News Staff']
+  top_authors_by_source = top_authors_by_source[~((top_authors_by_source['source_name'] == 'Fox News') & (top_authors_by_source['author'].isin(exclude_authors)))]
+
+  top_authors = top_authors_by_source.groupby('source_name').apply(lambda x: x.nlargest(3, 'count')).reset_index(drop=True)['author']
+  filtered_sentiment_counts = sentiment_counts[sentiment_counts['author'].isin(top_authors)]
+
+  # Capitalize sentiment values
+  filtered_sentiment_counts['sentiment'] = filtered_sentiment_counts['sentiment'].str.capitalize()
+
+  # Create the treemap visualization
+  fig = px.treemap(filtered_sentiment_counts, path=['source_name', 'author', 'sentiment'], values='count',
+                   color='sentiment', color_discrete_map={"source_name": "rgba(153, 204, 255, 1)", "Positive": "rgba(68, 168, 104,0.8)", "Negative": "rgba(255, 51, 51,0.8)", "Neutral": "rgba(60,158,255,0.8)"},
+                   title="Top 3 Authors Sentiment Counts per News Source")
+
+  # update layout
+  fig.update_layout(
+      title={
+          'text': "Top 3 Authors Sentiment Counts per News Source",
+          'y':0.95,
+          'x':0.5,
+          'xanchor': 'center',
+          'yanchor': 'top'})
+
+  # Setting the theme
+  fig.update_layout(template='seaborn')
+  # making background grey
+  fig.update_layout({'plot_bgcolor':'rgba(218,222,229,0)'})
+
+  # making the boxes bigger
+  fig.update_layout({'margin':dict(t=50, l=25, r=25, b=25)})
+  fig.update_traces(textfont_size=15)
+
+
+
+  fig.show()
+
+  # filter to only include CNN, Fox News, and MSNBC
+  df = df[df['source'].isin(['CNN', 'Fox News', 'MSNBC'])]
+
+  news_sources = ['CNN', 'MSNBC', 'Fox News']
+
+  # Concatenate all article contents for each news source
+  source_contents = defaultdict(str)
+  for _, row in df.iterrows():
+      source = row['source_name']
+      content = row['content']
+      if isinstance(content, str):
+          source_contents[source] += content
 
 # Define a color function for the word cloud
 def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
