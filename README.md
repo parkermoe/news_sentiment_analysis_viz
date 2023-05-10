@@ -18,7 +18,8 @@ To use this project, follow these steps:
 1. Clone the repository.
 2. Install the required dependencies by running `pip install -r requirements.txt`.
 3. Replace `'YOUR_NEWSAPI_KEY_HERE'` in `main.py` with your NewsAPI key.
-4. Run `main.py` to execute the script and generate the visualizations.
+4. Replace `query_term` in main.py with your query of interest
+5. Run `main.py` to execute the script and generate the visualizations.
 
 ## Code Structure
 
