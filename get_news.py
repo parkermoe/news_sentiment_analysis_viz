@@ -80,7 +80,7 @@ def fetch_and_save_data(newsapi, query_terms, left_wing_sources, right_wing_sour
         return df
      
     
- def get_news(NEWSAPI, query_term):
+def get_news(NEWSAPI, query_term):
     newsapi = NewsApiClient(api_key=NEWSAPI)
     
     # Add the lists of your chosen left wing and right wing sources here
