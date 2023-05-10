@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import numpy as np
 from wordcloud import WordCloud
-from collections import defaultdict
+from collections import defaultdict, Counter
 import pandas as pd
 import nltk
 from nltk.corpus import stopwords
