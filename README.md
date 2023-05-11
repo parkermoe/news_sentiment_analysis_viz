@@ -2,6 +2,8 @@
 
 This project is a sentiment analysis tool built in Python to analyze and visualize the sentiment of news articles related to climate change. The project uses the NewsAPI to fetch news articles from various sources, NLTK for preprocessing and sentiment analysis, and Matplotlib, Plotly, and Wordcloud for visualization.
 
+If you'd prefer not to reproduce this analysis directly, you can read my accompanying blog post that provides a walkthrough of this project and provides great detail on approach & techniques used: https://medium.com/@parkermo_86729/concocting-a-bert-soup-for-sentiment-analysis-of-news-sources-1de0ab64d1ff
+
 ## Overview
 
 The project has four main steps:
