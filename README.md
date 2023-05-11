@@ -8,9 +8,9 @@ If you'd prefer not to reproduce this analysis directly, you can read my accompa
 
 The project has four main steps:
 
-1. Fetching news articles related to climate change.
+1. Fetching news articles related to query of interest using NewsAPI and Beautiful Soup.
 2. Cleaning and preprocessing the articles.
-3. Performing sentiment analysis on the articles.
+3. Performing sentiment analysis on the articles using a pretrained BERT model for sentiment classification.
 4. Visualizing the results.
 
 ## Usage
