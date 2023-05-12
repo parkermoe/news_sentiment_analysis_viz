@@ -1,4 +1,4 @@
-# News Sentiment Analysis + Visualization
+# Sentiment Analysis of Popular News Sources + Visualization
 
 This project is a sentiment analysis tool built in Python to analyze and visualize the sentiment of news articles related to climate change. The project uses the NewsAPI to fetch news articles from various sources, NLTK for preprocessing and sentiment analysis, and Matplotlib, Plotly, and Wordcloud for visualization.
 
